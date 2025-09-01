@@ -1,5 +1,6 @@
 import socket
 import struct
+import sys
 
 
 def format_bytes(data):
@@ -42,7 +43,16 @@ def parse_udp_header(data):
 
 
 # Create raw socket
-sniffer = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_IP)
+try:
+    sniffer = socket.socket(
+        socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_IP
+    )
+except PermissionError:
+    print("[!] Permission denied: raw sockets require admin/root privileges.")
+    print("    On Windows: run PowerShell as Administrator and retry.")
+    print("    On Linux: run with sudo or as root.")
+    sys.exit(1)
+
 host = socket.gethostbyname(socket.gethostname())
 sniffer.bind((host, 0))
 sniffer.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
