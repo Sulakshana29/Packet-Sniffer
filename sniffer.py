@@ -2,7 +2,6 @@ import socket
 import struct
 
 
-# --- Helper functions ---
 def format_bytes(data):
     """
     Format bytes to hex for readability.
